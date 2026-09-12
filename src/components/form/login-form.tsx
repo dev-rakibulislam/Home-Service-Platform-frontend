@@ -20,6 +20,7 @@ import { Spinner } from "../ui/spinner";
 import { useState } from "react";
 import { Eye, EyeClosed } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function LoginForm({
   className,
@@ -27,6 +28,8 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
   const [showPassword, setShowPassword] = useState(false);
   const { mutate: login, isPending: loginPending } = useLogin();
+  const queryClient = useQueryClient();
+
   const router = useRouter();
   const form = useForm({
     defaultValues: {
@@ -44,7 +47,12 @@ export function LoginForm({
           toast.success(result.message, {
             description: "Welcome back",
           });
-          router.push("/dashboard");
+
+          queryClient.refetchQueries({
+            queryKey: ["user"],
+          });
+
+          router.push("/");
         },
         onError: () => {
           toast.success(" Authorization failure", {

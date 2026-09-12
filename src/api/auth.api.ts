@@ -7,3 +7,12 @@ export function userLogin(payload: { email: string; password: string }) {
 export function userRegister(payload: { email: string; password: string }) {
   return apiClient("/auth/register", { method: "POST", body: payload });
 }
+
+export function userLogout() {
+  return apiClient("/auth/logout", { method: "POST" });
+}
+
+
+export function getMe() {
+  return apiClient("/auth/me");
+}

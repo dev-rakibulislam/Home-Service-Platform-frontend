@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, LogOut, User } from "lucide-react";
+import { Loader2, LogOut, Menu, User } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import {
   NavigationMenu,
@@ -30,7 +32,10 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { Button } from "@/components/ui/button";
+
 import Logo from "./logo";
+import { useGetMe, useLogout } from "@/hooks";
+import siteDetails from "@/config/publicSiteData";
 
 const navItems = [
   {
@@ -52,23 +57,42 @@ const navItems = [
 ];
 
 export function Navbar() {
-  const isLoggedIn = true;
+  const queryClient = useQueryClient();
 
-  const user = {
-    name: "Rakibul Islam",
-    email: "rakibul@example.com",
-    image: "",
-  };
+  const { data, isLoading } = useGetMe();
+  const { mutate: logout, isPending: isLoggingOut } = useLogout();
+
+  // API response অনুযায়ী user বের করা
+  const user = data?.data;
+
+  const userName = user?.name ?? "User";
+  const userEmail = user?.email ?? "";
+  const userImage = user?.image || "/user.avif";
+
+  const userInitial = userName.charAt(0).toUpperCase();
 
   const handleLogout = () => {
-    console.log("logout");
+    logout(undefined, {
+      onSuccess: () => {
+        queryClient.removeQueries({
+          queryKey: ["user"],
+        });
+
+        toast.success("Logged out successfully");
+      },
+
+      onError: () => {
+        toast.error("Logout failed", {
+          description: "Please try again.",
+        });
+      },
+    });
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-8">
-       
           <Logo />
 
           <NavigationMenu className="hidden md:flex">
@@ -90,105 +114,177 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-2">
-          {!isLoggedIn && (
-            <Button asChild>
-              <Link href="/login">Login</Link>
-            </Button>
-          )}
+          <div className="hidden md:block">
+            {isLoading && (
+              <div className="h-9 w-24 animate-pulse rounded-md bg-muted" />
+            )}
 
-          {isLoggedIn && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="flex h-auto items-center gap-2 px-2 py-1.5"
-                >
-                  <Avatar className="size-9">
-                    <AvatarImage src={user.image} alt={user.name} />
+            {!isLoading && !user && (
+              <Button asChild>
+                <Link href="/login">Login</Link>
+              </Button>
+            )}
 
-                    <AvatarFallback>
-                      {user.name.charAt(0).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
+            {!isLoading && user && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    disabled={isLoggingOut}
+                    className="flex h-auto items-center gap-2 px-2 py-1.5"
+                  >
+                    <Avatar className="size-9">
+                      <AvatarImage
+                        src={userImage}
+                        alt={`${userName} profile`}
+                      />
 
-                  <div className="hidden text-left sm:block">
-                    <p className="text-sm font-medium">{user.name}</p>
+                      <AvatarFallback>{userInitial}</AvatarFallback>
+                    </Avatar>
 
-                    <p className="text-xs text-muted-foreground">
-                      {user.email}
-                    </p>
-                  </div>
-                </Button>
-              </DropdownMenuTrigger>
+                    <div className="hidden text-left lg:block">
+                      <p className="max-w-32 truncate text-sm font-medium">
+                        {userName}
+                      </p>
 
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>
-                  <div className="flex flex-col">
-                    <span>{user.name}</span>
+                      <p className="max-w-40 truncate text-xs text-muted-foreground">
+                        {userEmail}
+                      </p>
+                    </div>
+                  </Button>
+                </DropdownMenuTrigger>
 
-                    <span className="text-xs font-normal text-muted-foreground">
-                      {user.email}
-                    </span>
-                  </div>
-                </DropdownMenuLabel>
+                <DropdownMenuContent align="end" className="w-60">
+                  <DropdownMenuLabel>
+                    <div className="flex flex-col gap-1">
+                      <span className="truncate font-medium">{userName}</span>
 
-                <DropdownMenuSeparator />
+                      <span className="truncate text-xs font-normal text-muted-foreground">
+                        {userEmail}
+                      </span>
+                    </div>
+                  </DropdownMenuLabel>
 
-                <DropdownMenuItem asChild>
-                  <Link href="/profile">
-                    <User className="mr-2 size-4" />
-                    Profile
-                  </Link>
-                </DropdownMenuItem>
+                  <DropdownMenuSeparator />
 
-                <DropdownMenuItem
-                  onClick={handleLogout}
-                  className="text-destructive focus:text-destructive"
-                >
-                  <LogOut className="mr-2 size-4" />
-                  Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
+                  <DropdownMenuItem asChild>
+                    <Link href="/profile">
+                      <User className="mr-2 size-4" />
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem
+                    disabled={isLoggingOut}
+                    onClick={handleLogout}
+                    className="text-destructive focus:text-destructive"
+                  >
+                    {isLoggingOut ? (
+                      <Loader2 className="mr-2 size-4 animate-spin" />
+                    ) : (
+                      <LogOut className="mr-2 size-4" />
+                    )}
+
+                    {isLoggingOut ? "Logging out..." : "Logout"}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+          </div>
 
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden">
                 <Menu className="size-5" />
-                <span className="sr-only">Open menu</span>
+                <span className="sr-only">Open navigation menu</span>
               </Button>
             </SheetTrigger>
 
-            <SheetContent side="left">
+            <SheetContent side="left" className="w-70 sm:w-[320px]">
               <SheetHeader>
                 <SheetTitle>
                   <Link href="/" className="flex items-center gap-2">
-                    <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                      H
-                    </div>
-                    HealthCare
+                    <Logo />
                   </Link>
                 </SheetTitle>
               </SheetHeader>
 
-              <nav className="mt-8 flex flex-col gap-2">
+              <nav className="mt-8 flex flex-col gap-1">
                 {navItems.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="rounded-md px-3 py-2 text-sm font-medium hover:bg-accent"
+                    className="rounded-md px-3 py-2.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
                   >
                     {item.title}
                   </Link>
                 ))}
               </nav>
 
-              {!isLoggedIn && (
-                <Button asChild className="mt-6 w-full">
+              <div className="my-6 border-t" />
+
+              {isLoading && (
+                <div className="h-10 w-full animate-pulse rounded-md bg-muted" />
+              )}
+
+              {!isLoading && !user && (
+                <Button asChild className="w-full">
                   <Link href="/login">Login</Link>
                 </Button>
               )}
+
+              {!isLoading && user && (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 rounded-lg border p-3">
+                    <Avatar className="size-10">
+                      <AvatarImage
+                        src={userImage}
+                        alt={`${userName} profile`}
+                      />
+
+                      <AvatarFallback>{userInitial}</AvatarFallback>
+                    </Avatar>
+
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium">{userName}</p>
+
+                      <p className="truncate text-xs text-muted-foreground">
+                        {userEmail}
+                      </p>
+                    </div>
+                  </div>
+
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="w-full justify-start"
+                  >
+                    <Link href="/profile">
+                      <User className="mr-2 size-4" />
+                      Profile
+                    </Link>
+                  </Button>
+
+                  <Button
+                    variant="destructive"
+                    className="w-full"
+                    disabled={isLoggingOut}
+                    onClick={handleLogout}
+                  >
+                    {isLoggingOut ? (
+                      <Loader2 className="mr-2 size-4 animate-spin" />
+                    ) : (
+                      <LogOut className="mr-2 size-4" />
+                    )}
+
+                    {isLoggingOut ? "Logging out..." : "Logout"}
+                  </Button>
+                </div>
+              )}
+
+              <p className="mt-auto pt-8 text-center text-xs text-muted-foreground">
+                © {new Date().getFullYear()} {siteDetails.name}
+              </p>
             </SheetContent>
           </Sheet>
         </div>
