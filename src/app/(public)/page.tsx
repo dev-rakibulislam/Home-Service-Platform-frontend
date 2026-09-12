@@ -1,11 +1,10 @@
 "use client";
-import { Navbar } from "@/components/public/navbar";
-import { Button } from "@/components/ui/button";
+import Hero from "@/components/public/hero";
 
 export default function HomePage() {
   return (
     <>
-      <Navbar />
+      <Hero />
     </>
   );
 }
