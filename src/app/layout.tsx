@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Noto_Sans, Oxanium } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import siteDetails from "@/components/public/publicSiteData";
+import siteDetails from "@/config/publicSiteData";
 import QueryProvider from "@/providers/query.provider";
 import { toast, Toaster } from "sonner";
 

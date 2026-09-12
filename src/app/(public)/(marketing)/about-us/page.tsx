@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import siteDetails from "@/components/public/publicSiteData";
+import siteDetails from "@/config/publicSiteData";
 
 export default function AboutPage() {
   return (
@@ -94,7 +94,7 @@ export default function AboutPage() {
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-primary">
-              Why {siteDetails.name}
+              Why FixItNow
             </p>
 
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">

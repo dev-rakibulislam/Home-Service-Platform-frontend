@@ -10,7 +10,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import siteDetails from "../public/publicSiteData";
+import siteDetails from "../../config/publicSiteData";
 import Link from "next/link";
 import { useLogin } from "@/hooks";
 import { useForm } from "@tanstack/react-form";

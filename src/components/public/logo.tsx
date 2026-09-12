@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import siteDetails from "./publicSiteData";
+import siteDetails from "../../config/publicSiteData";
 
 export default function Logo() {
   return (
