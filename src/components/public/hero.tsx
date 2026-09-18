@@ -4,10 +4,9 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 
 export default function Hero() {
-  return (
+  return(
     <section className="relative overflow-hidden">
-      <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-2 lg:px-8">
-        {/* Content */}
+      <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-2 lg:px-8"> 
         <div className="max-w-2xl">
           <div className="mb-5 inline-flex items-center rounded-full border bg-muted px-4 py-2 text-sm font-medium">
             🛠️ Trusted home services, made simple

@@ -168,7 +168,7 @@ export function Navbar() {
                   <DropdownMenuSeparator />
 
                   <DropdownMenuItem asChild>
-                    <Link href="/profile">
+                    <Link href="/dashboard/profile">
                       <User className="mr-2 size-4" />
                       Profile
                     </Link>
@@ -259,7 +259,7 @@ export function Navbar() {
                     variant="outline"
                     className="w-full justify-start"
                   >
-                    <Link href="/profile">
+                    <Link href="/dashboard/profile">
                       <User className="mr-2 size-4" />
                       Profile
                     </Link>
