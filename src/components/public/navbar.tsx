@@ -47,6 +47,10 @@ const navItems = [
     href: "/services",
   },
   {
+    title: "Technicians",
+    href: "/technicians",
+  },
+  {
     title: "About Us",
     href: "/about-us",
   },

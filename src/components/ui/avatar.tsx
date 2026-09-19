@@ -1,6 +1,4 @@
 "use client"
-
-import * as React from "react"
 import { cn } from "cn"
 import { Avatar as AvatarPrimitive } from "radix-ui"
 

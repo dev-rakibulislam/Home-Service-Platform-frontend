@@ -12,7 +12,6 @@ export function userLogout() {
   return apiClient("/auth/logout", { method: "POST" });
 }
 
-
 export function getMe() {
   return apiClient("/auth/me");
 }
