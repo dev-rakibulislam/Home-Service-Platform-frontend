@@ -1,5 +1,5 @@
 import { getAvailableTechnicians } from "@/api";
-import {  useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 export function useGetAvailableTechnicians() {
   return useQuery({

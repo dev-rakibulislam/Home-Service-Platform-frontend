@@ -1,5 +1,4 @@
-
-export default function TechnicianCard({ technician }:any) {
+export default function TechnicianCard({ technician }: any) {
   const rating = Number(technician.avgRating);
 
   return (
@@ -43,7 +42,6 @@ export default function TechnicianCard({ technician }:any) {
           <div className="flex h-24 w-24 items-center justify-center rounded-3xl border-4 border-white bg-gradient-to-br from-blue-500 to-indigo-600 text-3xl font-extrabold text-white shadow-xl ring-1 ring-slate-200 transition-transform duration-300 group-hover:scale-105">
             {technician.user.name.charAt(0).toUpperCase()}
           </div>
-
         </div>
 
         <div className="mt-4">
@@ -168,5 +166,4 @@ export default function TechnicianCard({ technician }:any) {
       </div>
     </div>
   );
-
 }

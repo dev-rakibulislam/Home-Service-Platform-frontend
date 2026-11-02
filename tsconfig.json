@@ -28,7 +28,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
-, "src/app/(public)/(marketing)/privacy-policy/page.tsx"  ],
+    "**/*.mts",
+    "src/app/(public)/(marketing)/privacy-policy/page.tsx"
+  ],
   "exclude": ["node_modules"]
 }

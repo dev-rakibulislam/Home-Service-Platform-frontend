@@ -1,10 +1,5 @@
-// import { ReactNode } from "react";
-
+import Footer from "@/components/public/footer";
 import { Navbar } from "@/components/public/navbar";
-
-// export default function Layout({ children }:{children:ReactNode}) {
-//   return { children };
-// }
 
 export default function PublicLayout({
   children,
@@ -13,10 +8,9 @@ export default function PublicLayout({
 }) {
   return (
     <>
-       <Navbar />
-      
+      <Navbar />
       {children}
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 }

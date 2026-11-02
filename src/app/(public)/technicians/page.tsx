@@ -8,10 +8,10 @@ export default function TechnicianPage() {
     return <div>Loading...</div>;
   }
   return (
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {technicians?.data?.map((technician: any) => (
-          <TechnicianCard key={technician.id} technician={technician} />
-        ))}
-      </div>
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {technicians?.data?.map((technician: any) => (
+        <TechnicianCard key={technician.id} technician={technician} />
+      ))}
+    </div>
   );
 }

@@ -54,9 +54,14 @@ export function LoginForm({
 
           router.push("/");
         },
-        onError: () => {
-          toast.success(" Authorization failure", {
-            description: "Something went wrong. Please try again",
+        onError: (error: any) => {
+          const message =
+            error.data?.message ??
+            error.response?._data?.message ??
+            error.message ??
+            "Something went wrong";
+          toast.error("Login failed", {
+            description: message,
           });
         },
       });

@@ -30,9 +30,9 @@ export default function AboutPage() {
             </h1>
 
             <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
-              {siteDetails.name} connects homeowners with trusted professionals, making it
-              easier to find the right technician and get your home projects
-              done with confidence.
+              {siteDetails.name} connects homeowners with trusted professionals,
+              making it easier to find the right technician and get your home
+              projects done with confidence.
             </p>
           </div>
         </div>

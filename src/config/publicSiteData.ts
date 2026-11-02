@@ -1,4 +1,4 @@
 const siteDetails = {
-  name:"FixItNow"
+  name: "FixItNow",
 };
 export default siteDetails;

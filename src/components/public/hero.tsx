@@ -1,119 +1,104 @@
-import { ArrowRight, CircleCheck, Phone, ShieldCheck, Snowflake, Sparkles, Zap,Star } from "lucide-react";
+import {
+  ArrowRight,
+  CircleCheck,
+  Phone,
+  ShieldCheck,
+  Snowflake,
+  Sparkles,
+  Zap,
+  Star,
+  BadgeCheck,
+  ArrowDownRight,
+  Wrench,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/button";
 
 export default function Hero() {
-  return (
-      <section className="relative isolate">
-        {/* Background décor */}
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 bg-linear-to-b from-primary/10 via-background to-background"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,black,transparent)]"
-        />
-        <div
-          aria-hidden
-          className="absolute -top-24 -left-24 -z-10 size-96 rounded-full bg-primary/20 blur-3xl"
-        />
-        <div
-          aria-hidden
-          className="absolute top-10 -right-28 -z-10 size-[28rem] rounded-full bg-primary/10 blur-3xl"
-        />
 
-        <div className="mx-auto max-w-7xl px-4 pt-20 pb-16 sm:px-6 lg:px-8 lg:pt-28 lg:pb-24">
-          <div className="grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr]">
-            {/* Copy */}
-            <div className="max-w-2xl">
-              <span className="inline-flex items-center gap-2 rounded-full border bg-background/80 px-4 py-1.5 text-sm font-medium shadow-sm backdrop-blur">
-                <Sparkles className="size-4 text-primary" />
-                FixItNow Services, made simple
+    return (
+      <section className="relative isolate overflow-hidden bg-[#f2f8fa]">
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_80%_12%,rgba(14,165,190,0.13),transparent_36%),radial-gradient(ellipse_at_5%_95%,rgba(34,197,160,0.1),transparent_34%)]" />
+        <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[1.04fr_0.96fr] lg:px-8 lg:py-24">
+          <div className="relative z-10">
+            <div className="inline-flex items-center gap-2 rounded-full border border-teal-200 bg-white/80 px-4 py-2 text-sm font-medium text-teal-900 shadow-sm">
+              <Sparkles className="size-4 text-teal-600" />
+              Home care, made easy
+            </div>
+            <h1 className="mt-6 max-w-2xl text-5xl leading-[1.08] font-semibold tracking-[-0.045em] text-slate-950 sm:text-6xl lg:text-[4.4rem]">
+              A better home starts with the{" "}
+              <span className="text-teal-700">right hands.</span>
+            </h1>
+            <p className="mt-6 max-w-xl text-lg leading-8 text-slate-600">
+              From a leaky tap to a cooler afternoon, find a skilled local
+              professional and book a time that works for you.
+            </p>
+
+            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-slate-600">
+              <span className="inline-flex items-center gap-2">
+                <ShieldCheck className="size-4 text-teal-700" /> Trusted
+                professionals
               </span>
+              <span className="inline-flex items-center gap-2">
+                <BadgeCheck className="size-4 text-teal-700" /> Clear upfront
+                pricing
+              </span>
+            </div>
+            <Link
+              href="/services"
+              className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-slate-800 hover:text-teal-700"
+            >
+              Explore all services <ArrowDownRight className="size-4" />
+            </Link>
+          </div>
 
-              <h1 className="mt-6 text-4xl font-bold tracking-tight text-balance sm:text-5xl lg:text-6xl">
-                Services That Keep Your Home{" "}
-                <span className="bg-gradient-to-r from-primary via-primary/70 to-primary/40 bg-clip-text text-transparent">
-                  Running Smoothly
-                </span>
-              </h1>
-
-              <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
-                From cooling to plumbing and power, book trusted, insured
-                professionals who treat your home like their own — right when
-                you need them.
-              </p>
-
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button asChild size="lg">
-                  <Link href="/services">
-                    Explore Services
-                    <ArrowRight className="ml-2 size-4" />
-                  </Link>
-                </Button>
-
-                <Button asChild variant="outline" size="lg">
-                  <Link href="/technicians">Find a Technician</Link>
-                </Button>
-              </div>
-
-              {/* Stats */}
-              <div className="mt-10 grid max-w-md grid-cols-3 divide-x divide-border/70 rounded-2xl border bg-background/70 py-4 shadow-sm backdrop-blur">
-                {[
-                  { value: "500+", label: "Verified pros" },
-                  { value: "4.9/5", label: "Customer rating" },
-                  { value: "12k+", label: "Jobs completed" },
-                ].map((stat) => (
-                  <div key={stat.label} className="px-4 text-center">
-                    <p className="text-xl font-bold sm:text-2xl">
-                      {stat.value}
+          <div className="relative mx-auto hidden w-full max-w-xl md:block xl:ml-auto">
+            {" "}
+            <div
+              className="absolute -inset-4 rotate-2 rounded-[2.5rem] bg-teal-200/50"
+              aria-hidden="true"
+            />
+            <div className="relative overflow-hidden rounded-[2rem] bg-slate-200 shadow-2xl shadow-slate-900/15">
+              <Image
+                src="/hero-image.webp"
+                alt="A home service professional ready to help"
+                width={900}
+                height={760}
+                priority
+                className="aspect-[1.08/1] h-full w-full object-cover"
+              />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/75 via-slate-950/25 to-transparent p-6 pt-24 text-white sm:p-8 sm:pt-28">
+                <div className="flex items-end justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-medium text-white/75">
+                      Your home, in good hands
                     </p>
-                    <p className="mt-0.5 text-xs text-muted-foreground">
-                      {stat.label}
+                    <p className="mt-1 text-2xl font-semibold">
+                      Help is closer than you think.
                     </p>
                   </div>
-                ))}
+                  <div className="hidden rounded-2xl border border-white/20 bg-white/15 p-3 backdrop-blur sm:block">
+                    <Wrench className="size-6" />
+                  </div>
+                </div>
               </div>
             </div>
-
-            {/* Floating feature card */}
-            <div className="relative mx-auto hidden w-full max-w-md lg:block">
-              <div
-                aria-hidden
-                className="absolute -top-8 -right-8 size-40 rounded-full bg-primary/2 blur-2xl"
-              />
-
-              {/* Hero Image */}
-              <div className="relative hidden lg:block">
-                <div className="overflow-hidden rounded-3xl">
-                  <Image
-                    src="/hero-image.webp"
-                    alt="Professional home service technician"
-                    width={700}
-                    height={600}
-                    priority
-                    className="h-auto w-full object-cover"
-                  />
-                </div>
-              </div>
-
-              {/* Floating badge */}
-              <div className="absolute -bottom-6 -left-8 flex -rotate-3 items-center gap-3 rounded-2xl border bg-background/50 p-4 shadow-lg  backdrop-blur">
-                <div className="flex size-11 items-center justify-center rounded-full bg-primary/10">
-                  <Zap className="size-5 text-primary" />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold">Same-day service</p>
-                  <p className="text-xs text-muted-foreground">
-                    Quality service you can trust
-                  </p>
-                </div>
-              </div>
+            <div className="absolute -bottom-5 -left-3 flex items-center gap-3 rounded-2xl border border-slate-100 bg-white p-4 shadow-xl sm:-left-8">
+              <span className="flex size-11 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
+                <Star className="size-5 fill-current" />
+              </span>
+              <span>
+                <span className="block text-sm font-semibold text-slate-900">
+                  Quality you can count on
+                </span>
+                <span className="mt-0.5 block text-xs text-slate-500">
+                  Real pros. Real homes.
+                </span>
+              </span>
             </div>
           </div>
         </div>
       </section>
-  );
-}
+    );
+  }

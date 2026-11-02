@@ -122,9 +122,9 @@ export default function PrivacyPolicyPage() {
 
               <p className="mt-4 leading-7 text-muted-foreground">
                 When a customer books a service, {siteDetails.name} processes
-                information such as the selected service, technician,
-                schedule, and service address. This information is used to
-                coordinate the requested home service.
+                information such as the selected service, technician, schedule,
+                and service address. This information is used to coordinate the
+                requested home service.
               </p>
             </section>
 
@@ -133,9 +133,7 @@ export default function PrivacyPolicyPage() {
               <div className="flex items-center gap-3">
                 <CreditCard className="size-6 text-primary" />
 
-                <h2 className="text-2xl font-bold">
-                  5. Payments
-                </h2>
+                <h2 className="text-2xl font-bold">5. Payments</h2>
               </div>
 
               <p className="mt-4 leading-7 text-muted-foreground">
@@ -156,15 +154,13 @@ export default function PrivacyPolicyPage() {
               <div className="flex items-center gap-3">
                 <Star className="size-6 text-primary" />
 
-                <h2 className="text-2xl font-bold">
-                  6. Reviews and Ratings
-                </h2>
+                <h2 className="text-2xl font-bold">6. Reviews and Ratings</h2>
               </div>
 
               <p className="mt-4 leading-7 text-muted-foreground">
-                Customers may submit ratings and comments after using a
-                service. Reviews may be associated with the relevant booking
-                or technician and may be displayed as part of the platform's
+                Customers may submit ratings and comments after using a service.
+                Reviews may be associated with the relevant booking or
+                technician and may be displayed as part of the platform's
                 service experience.
               </p>
             </section>
@@ -174,9 +170,7 @@ export default function PrivacyPolicyPage() {
               <div className="flex items-center gap-3">
                 <ShieldCheck className="size-6 text-primary" />
 
-                <h2 className="text-2xl font-bold">
-                  7. Information Sharing
-                </h2>
+                <h2 className="text-2xl font-bold">7. Information Sharing</h2>
               </div>
 
               <p className="mt-4 leading-7 text-muted-foreground">
@@ -187,9 +181,9 @@ export default function PrivacyPolicyPage() {
               </p>
 
               <p className="mt-4 leading-7 text-muted-foreground">
-                We may also work with third-party providers for services such
-                as payment processing, hosting, authentication, or other
-                technical operations.
+                We may also work with third-party providers for services such as
+                payment processing, hosting, authentication, or other technical
+                operations.
               </p>
             </section>
 
@@ -198,9 +192,7 @@ export default function PrivacyPolicyPage() {
               <div className="flex items-center gap-3">
                 <Lock className="size-6 text-primary" />
 
-                <h2 className="text-2xl font-bold">
-                  8. Data Security
-                </h2>
+                <h2 className="text-2xl font-bold">8. Data Security</h2>
               </div>
 
               <p className="mt-4 leading-7 text-muted-foreground">
@@ -218,9 +210,7 @@ export default function PrivacyPolicyPage() {
 
             {/* 9 */}
             <section>
-              <h2 className="text-2xl font-bold">
-                9. User Accounts
-              </h2>
+              <h2 className="text-2xl font-bold">9. User Accounts</h2>
 
               <p className="mt-4 leading-7 text-muted-foreground">
                 Users are responsible for keeping their account credentials
@@ -231,9 +221,7 @@ export default function PrivacyPolicyPage() {
 
             {/* 10 */}
             <section>
-              <h2 className="text-2xl font-bold">
-                10. Administrator Access
-              </h2>
+              <h2 className="text-2xl font-bold">10. Administrator Access</h2>
 
               <p className="mt-4 leading-7 text-muted-foreground">
                 Platform administrators may access certain user and booking
@@ -252,8 +240,7 @@ export default function PrivacyPolicyPage() {
               <p className="mt-4 leading-7 text-muted-foreground">
                 {siteDetails.name} may use browser cookies to support
                 authentication and maintain user sessions. These cookies help
-                authenticated users access protected features of the
-                platform.
+                authenticated users access protected features of the platform.
               </p>
             </section>
 
@@ -264,17 +251,15 @@ export default function PrivacyPolicyPage() {
               </h2>
 
               <p className="mt-4 leading-7 text-muted-foreground">
-                We may update this Privacy Policy when our platform,
-                services, or data practices change. The updated version will
-                be published on this page with a new revision date.
+                We may update this Privacy Policy when our platform, services,
+                or data practices change. The updated version will be published
+                on this page with a new revision date.
               </p>
             </section>
 
             {/* 13 */}
             <section className="rounded-2xl border bg-muted/50 p-6 sm:p-8">
-              <h2 className="text-2xl font-bold">
-                13. Contact Us
-              </h2>
+              <h2 className="text-2xl font-bold">13. Contact Us</h2>
 
               <p className="mt-4 leading-7 text-muted-foreground">
                 If you have questions or concerns about this Privacy Policy or

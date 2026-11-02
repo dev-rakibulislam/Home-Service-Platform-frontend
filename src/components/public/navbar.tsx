@@ -11,15 +11,14 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
-
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,67 +27,59 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
 import { Button } from "@/components/ui/button";
 
-import Logo from "./logo";
 import { useGetMe, useLogout } from "@/hooks";
 import siteDetails from "@/config/publicSiteData";
+import Logo from "../shared/logo";
 
 const navItems = [
-  {
-    title: "Home",
-    href: "/",
-  },
-  {
-    title: "Services",
-    href: "/services",
-  },
-  {
-    title: "Technicians",
-    href: "/technicians",
-  },
-  {
-    title: "About Us",
-    href: "/about-us",
-  },
-  {
-    title: "Privacy Policy",
-    href: "/privacy-policy",
-  },
+  { title: "Home", href: "/" },
+  { title: "Services", href: "/services" },
+  { title: "Technicians", href: "/technicians" },
+  { title: "About Us", href: "/about-us" },
+  { title: "Privacy Policy", href: "/privacy-policy" },
 ];
+
+function UserAvatar({
+  name,
+  image,
+  className,
+}: {
+  name: string;
+  image: string;
+  className: string;
+}) {
+  return (
+    <Avatar className={className}>
+      <AvatarImage src={image} alt={`${name} profile`} />
+      <AvatarFallback>{name.charAt(0).toUpperCase()}</AvatarFallback>
+    </Avatar>
+  );
+}
 
 export function Navbar() {
   const queryClient = useQueryClient();
-
   const { data, isLoading } = useGetMe();
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
 
-  // API response অনুযায়ী user বের করা
   const user = data?.data;
+  const name = user?.name ?? "User";
+  const email = user?.email ?? "";
+  const image = user?.image || "/user.avif";
 
-  const userName = user?.name ?? "User";
-  const userEmail = user?.email ?? "";
-  const userImage = user?.image || "/user.avif";
-
-  const userInitial = userName.charAt(0).toUpperCase();
+  const LogoutIcon = isLoggingOut ? Loader2 : LogOut;
+  const logoutLabel = isLoggingOut ? "Logging out..." : "Logout";
 
   const handleLogout = () => {
     logout(undefined, {
       onSuccess: () => {
-        queryClient.removeQueries({
-          queryKey: ["user"],
-        });
-
+        queryClient.removeQueries({ queryKey: ["user"] });
         toast.success("Logged out successfully");
       },
-
       onError: () => {
-        toast.error("Logout failed", {
-          description: "Please try again.",
-        });
+        toast.error("Logout failed", { description: "Please try again." });
       },
     });
   };
@@ -96,19 +87,20 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        {/* Logo + desktop links */}
         <div className="flex items-center gap-8">
           <Logo />
 
           <NavigationMenu className="hidden md:flex">
             <NavigationMenuList>
-              {navItems.map((item) => (
-                <NavigationMenuItem key={item.href}>
+              {navItems.map(({ title, href }) => (
+                <NavigationMenuItem key={href}>
                   <NavigationMenuLink asChild>
                     <Link
-                      href={item.href}
-                      className="group inline-flex h-10 items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+                      href={href}
+                      className="inline-flex h-10 items-center rounded-md px-4 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
                     >
-                      {item.title}
+                      {title}
                     </Link>
                   </NavigationMenuLink>
                 </NavigationMenuItem>
@@ -118,84 +110,64 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Desktop auth */}
           <div className="hidden md:block">
-            {isLoading && (
+            {isLoading ? (
               <div className="h-9 w-24 animate-pulse rounded-md bg-muted" />
-            )}
-
-            {!isLoading && !user && (
+            ) : !user ? (
               <Button asChild>
                 <Link href="/login">Login</Link>
               </Button>
-            )}
-
-            {!isLoading && user && (
+            ) : (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
                     disabled={isLoggingOut}
-                    className="flex h-auto items-center gap-2 px-2 py-1.5"
+                    className="h-auto gap-2 px-2 py-1.5"
                   >
-                    <Avatar className="size-9">
-                      <AvatarImage
-                        src={userImage}
-                        alt={`${userName} profile`}
-                      />
-
-                      <AvatarFallback>{userInitial}</AvatarFallback>
-                    </Avatar>
-
+                    <UserAvatar name={name} image={image} className="size-9" />
                     <div className="hidden text-left lg:block">
                       <p className="max-w-32 truncate text-sm font-medium">
-                        {userName}
+                        {name}
                       </p>
-
                       <p className="max-w-40 truncate text-xs text-muted-foreground">
-                        {userEmail}
+                        {email}
                       </p>
                     </div>
                   </Button>
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent align="end" className="w-60">
-                  <DropdownMenuLabel>
-                    <div className="flex flex-col gap-1">
-                      <span className="truncate font-medium">{userName}</span>
-
-                      <span className="truncate text-xs font-normal text-muted-foreground">
-                        {userEmail}
-                      </span>
-                    </div>
+                  <DropdownMenuLabel className="flex flex-col gap-1">
+                    <span className="truncate font-medium">{name}</span>
+                    <span className="truncate text-xs font-normal text-muted-foreground">
+                      {email}
+                    </span>
                   </DropdownMenuLabel>
-
                   <DropdownMenuSeparator />
-
                   <DropdownMenuItem asChild>
                     <Link href="/dashboard/profile">
                       <User className="mr-2 size-4" />
                       Profile
                     </Link>
                   </DropdownMenuItem>
-
                   <DropdownMenuItem
                     disabled={isLoggingOut}
                     onClick={handleLogout}
                     className="text-destructive focus:text-destructive"
                   >
-                    {isLoggingOut ? (
-                      <Loader2 className="mr-2 size-4 animate-spin" />
-                    ) : (
-                      <LogOut className="mr-2 size-4" />
-                    )}
-
-                    {isLoggingOut ? "Logging out..." : "Logout"}
+                    <LogoutIcon
+                      className={`mr-2 size-4 ${isLoggingOut ? "animate-spin" : ""}`}
+                    />
+                    {logoutLabel}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             )}
           </div>
 
+          {/* Mobile menu */}
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden">
@@ -204,89 +176,84 @@ export function Navbar() {
               </Button>
             </SheetTrigger>
 
-            <SheetContent side="left" className="w-70 sm:w-[320px]">
+            <SheetContent side="left" className="w-70 sm:w-80">
               <SheetHeader>
-                <SheetTitle>
-                  <Link href="/" className="flex items-center gap-2">
+                <SheetTitle asChild>
+                  <div>
                     <Logo />
-                  </Link>
+                  </div>
                 </SheetTitle>
               </SheetHeader>
 
-              <nav className="mt-8 flex flex-col gap-1">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="rounded-md px-3 py-2.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
-                  >
-                    {item.title}
-                  </Link>
+              <nav className="mt-8 flex flex-col gap-1 px-4">
+                {navItems.map(({ title, href }) => (
+                  <SheetClose asChild key={href}>
+                    <Link
+                      href={href}
+                      className="rounded-md px-3 py-2.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+                    >
+                      {title}
+                    </Link>
+                  </SheetClose>
                 ))}
               </nav>
 
-              <div className="my-6 border-t" />
+              <div className="mx-4 my-6 border-t" />
 
-              {isLoading && (
-                <div className="h-10 w-full animate-pulse rounded-md bg-muted" />
-              )}
-
-              {!isLoading && !user && (
-                <Button asChild className="w-full">
-                  <Link href="/login">Login</Link>
-                </Button>
-              )}
-
-              {!isLoading && user && (
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3 rounded-lg border p-3">
-                    <Avatar className="size-10">
-                      <AvatarImage
-                        src={userImage}
-                        alt={`${userName} profile`}
+              <div className="px-4">
+                {isLoading ? (
+                  <div className="h-10 w-full animate-pulse rounded-md bg-muted" />
+                ) : !user ? (
+                  <SheetClose asChild>
+                    <Button asChild className="w-full">
+                      <Link href="/login">Login</Link>
+                    </Button>
+                  </SheetClose>
+                ) : (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 rounded-lg border p-3">
+                      <UserAvatar
+                        name={name}
+                        image={image}
+                        className="size-10"
                       />
-
-                      <AvatarFallback>{userInitial}</AvatarFallback>
-                    </Avatar>
-
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-medium">{userName}</p>
-
-                      <p className="truncate text-xs text-muted-foreground">
-                        {userEmail}
-                      </p>
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-medium">{name}</p>
+                        <p className="truncate text-xs text-muted-foreground">
+                          {email}
+                        </p>
+                      </div>
                     </div>
+
+                    <SheetClose asChild>
+                      <Button
+                        asChild
+                        variant="outline"
+                        className="w-full justify-start"
+                      >
+                        <Link href="/dashboard/profile">
+                          <User className="mr-2 size-4" />
+                          Profile
+                        </Link>
+                      </Button>
+                    </SheetClose>
+
+                    <Button
+                      variant="destructive"
+                      className="w-full"
+                      disabled={isLoggingOut}
+                      onClick={handleLogout}
+                    >
+                      <LogoutIcon
+                        className={`mr-2 size-4 ${isLoggingOut ? "animate-spin" : ""}`}
+                      />
+                      {logoutLabel}
+                    </Button>
                   </div>
+                )}
+              </div>
 
-                  <Button
-                    asChild
-                    variant="outline"
-                    className="w-full justify-start"
-                  >
-                    <Link href="/dashboard/profile">
-                      <User className="mr-2 size-4" />
-                      Profile
-                    </Link>
-                  </Button>
-
-                  <Button
-                    variant="destructive"
-                    className="w-full"
-                    disabled={isLoggingOut}
-                    onClick={handleLogout}
-                  >
-                    {isLoggingOut ? (
-                      <Loader2 className="mr-2 size-4 animate-spin" />
-                    ) : (
-                      <LogOut className="mr-2 size-4" />
-                    )}
-
-                    {isLoggingOut ? "Logging out..." : "Logout"}
-                  </Button>
-                </div>
-              )}
-
-              <p className="mt-auto pt-8 text-center text-xs text-muted-foreground">
+              <p className="mt-auto pb-4 text-center text-xs text-muted-foreground">
                 © {new Date().getFullYear()} {siteDetails.name}
               </p>
             </SheetContent>
