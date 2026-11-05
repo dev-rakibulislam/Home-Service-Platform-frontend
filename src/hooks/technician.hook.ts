@@ -1,4 +1,10 @@
-import { getAvailableTechnicians, TechnicianProfileUpdatePayload, updateTechnicianProfile } from "@/api";
+import {
+  createAvailability,
+  CreateAvailabilityPayload,
+  getAvailableTechnicians,
+  TechnicianProfileUpdatePayload,
+  updateTechnicianProfile,
+} from "@/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useGetAvailableTechnicians() {
@@ -22,6 +28,20 @@ export function useUpdateTechnicianProfile() {
 
       queryClient.invalidateQueries({
         queryKey: ["technicianProfile"],
+      });
+    },
+  });
+}
+
+export function useCreateAvailability() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: CreateAvailabilityPayload) => createAvailability(data),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["availability"],
       });
     },
   });

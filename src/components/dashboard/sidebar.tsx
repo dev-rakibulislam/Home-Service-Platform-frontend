@@ -32,15 +32,18 @@ export function DashboardSidebar() {
     <Sidebar collapsible="offcanvas">
       <SidebarContent>
         <div className="p-4">
-        <Logo/>
+          <Logo />
         </div>
 
         <SidebarMenu>
           {menus.map((item) => {
             const Icon = item.icon;
 
-            const isActive =
-              pathname === item.href || pathname.startsWith(`${item.href}/`);
+            const isDashboard = item.href.split("/").length === 3;
+
+            const isActive = isDashboard
+              ? pathname === item.href
+              : pathname === item.href || pathname.startsWith(`${item.href}/`);
 
             return (
               <SidebarMenuItem key={item.href}>
