@@ -1,7 +1,7 @@
 
 "use client";
 
-import { use } from "react";
+import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, use } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -16,7 +16,10 @@ import {
   Wrench,
   XCircle,
 } from "lucide-react";
-import { useGetServicesDetails } from "@/hooks";
+import { useGetMe, useGetServicesDetails } from "@/hooks";
+import { Button } from "@/components/ui/button";
+import { usePathname, useRouter } from "next/navigation";
+import BookingForm from "@/components/bookings/booking-form";
 
 function formatPrice(value: string | number) {
   return Number(value).toLocaleString("en-BD");
@@ -40,6 +43,15 @@ export default function ServiceDetailsPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const { data: meResponse, isLoading: isAuthLoading } = useGetMe();
+  const user = meResponse?.data;
+  console.log(user);
+  
+
   const { id } = use(params);
 
   const { data: response, isLoading, isError } = useGetServicesDetails(id);
@@ -65,7 +77,7 @@ export default function ServiceDetailsPage({
 
   const weeklyAvailability = (technician?.availabilitySlots ?? [])
     .filter(
-      (slot, index, slots) =>
+      (slot: { dayOfWeek: any; startTime: any; endTime: any; }, index: any, slots: any[]) =>
         slots.findIndex(
           (item) =>
             item.dayOfWeek === slot.dayOfWeek &&
@@ -74,7 +86,7 @@ export default function ServiceDetailsPage({
         ) === index,
     )
     .sort(
-      (a, b) => dayOrder.indexOf(a.dayOfWeek) - dayOrder.indexOf(b.dayOfWeek),
+      (a: { dayOfWeek: string; }, b: { dayOfWeek: string; }) => dayOrder.indexOf(a.dayOfWeek) - dayOrder.indexOf(b.dayOfWeek),
     );
 
   if (isLoading) {
@@ -257,17 +269,27 @@ export default function ServiceDetailsPage({
                 </p>
               )}
 
-              <button
+              <Button
                 type="button"
-                disabled={!technician?.isAvailable}
-                className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={!technician?.isAvailable || isAuthLoading}
+                className="mt-6 inline-flex min-h-12 w-full"
+                onClick={() => {
+                  if (!user) {
+                    router.push(
+                      `/login?callbackUrl=${encodeURIComponent(pathname)}`,
+                    );
+                    return;
+                  }
+
+                  // Authenticated booking flow will start here.
+                }}
               >
                 {technician?.isAvailable
                   ? "Book this service"
                   : "Currently unavailable"}
-
+                {/* <BookingForm serviceId={id} /> */}
                 <ArrowUpRight className="size-4" />
-              </button>
+              </Button>
 
               <p className="mt-4 flex items-start gap-2 text-xs leading-5 text-muted-foreground">
                 <ShieldCheck className="mt-0.5 size-4 shrink-0" />
@@ -299,14 +321,41 @@ export default function ServiceDetailsPage({
 
             {technician?.skills?.length ? (
               <div className="mt-4 flex flex-wrap gap-2">
-                {technician.skills.map((skill) => (
-                  <span
-                    key={skill}
-                    className="rounded-full border border-border px-3 py-2 text-sm"
-                  >
-                    {skill}
-                  </span>
-                ))}
+                {technician.skills.map(
+                  (
+                    skill:
+                      | boolean
+                      | Key
+                      | ReactElement<
+                          unknown,
+                          string | JSXElementConstructor<any>
+                        >
+                      | Iterable<ReactNode>
+                      | Promise<
+                          | string
+                          | number
+                          | bigint
+                          | boolean
+                          | ReactPortal
+                          | ReactElement<
+                              unknown,
+                              string | JSXElementConstructor<any>
+                            >
+                          | Iterable<ReactNode>
+                          | null
+                          | undefined
+                        >
+                      | null
+                      | undefined,
+                  ) => (
+                    <span
+                      key={skill}
+                      className="rounded-full border border-border px-3 py-2 text-sm"
+                    >
+                      {skill}
+                    </span>
+                  ),
+                )}
               </div>
             ) : (
               <p className="mt-3 text-sm text-muted-foreground">
@@ -346,20 +395,27 @@ export default function ServiceDetailsPage({
 
             {weeklyAvailability.length > 0 ? (
               <div className="mt-5 divide-y divide-border">
-                {weeklyAvailability.map((slot) => (
-                  <div
-                    key={`${slot.dayOfWeek}-${slot.startTime}-${slot.endTime}`}
-                    className="flex items-center justify-between gap-3 py-3 text-sm"
-                  >
-                    <span className="font-medium">
-                      {formatDay(slot.dayOfWeek)}
-                    </span>
+                {weeklyAvailability.map(
+                  (slot: {
+                    dayOfWeek: string;
+                    startTime: string;
+                    endTime: string;
+                  }) => (
+                    <div
+                      key={`${slot.dayOfWeek}-${slot.startTime}-${slot.endTime}`}
+                      className="flex items-center justify-between gap-3 py-3 text-sm"
+                    >
+                      <span className="font-medium">
+                        {formatDay(slot.dayOfWeek)}
+                      </span>
 
-                    <span className="text-right text-muted-foreground">
-                      {formatTime(slot.startTime)} – {formatTime(slot.endTime)}
-                    </span>
-                  </div>
-                ))}
+                      <span className="text-right text-muted-foreground">
+                        {formatTime(slot.startTime)} –{" "}
+                        {formatTime(slot.endTime)}
+                      </span>
+                    </div>
+                  ),
+                )}
               </div>
             ) : (
               <p className="mt-5 text-sm text-muted-foreground">

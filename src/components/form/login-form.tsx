@@ -19,7 +19,7 @@ import { userLoginSchema } from "@/validation";
 import { Spinner } from "../ui/spinner";
 import { useState } from "react";
 import { Eye, EyeClosed } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 
 export function LoginForm({
@@ -29,8 +29,11 @@ export function LoginForm({
   const [showPassword, setShowPassword] = useState(false);
   const { mutate: login, isPending: loginPending } = useLogin();
   const queryClient = useQueryClient();
-
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const callbackUrl = searchParams.get("callbackUrl");
+
   const form = useForm({
     defaultValues: {
       email: "",
@@ -52,7 +55,14 @@ export function LoginForm({
             queryKey: ["user"],
           });
 
-          router.push("/");
+          const redirectTo =
+            callbackUrl?.startsWith("/") &&
+            !callbackUrl.startsWith("//") &&
+            !callbackUrl.includes("\\")
+              ? callbackUrl
+              : "/";
+
+          router.replace(redirectTo);
         },
         onError: (error: any) => {
           const message =
@@ -170,7 +180,8 @@ export function LoginForm({
               </Button>
 
               <FieldDescription className="text-center">
-                Don&apos;t have an account? <a href="/">Sign up</a>
+                Don&apos;t have an account?{" "}
+                <Link href="/register">Sign up</Link>
               </FieldDescription>
             </FieldGroup>
           </form>

@@ -4,6 +4,21 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@keyframes spinner-scale {
+  0%,
+  100% {
+    transform: scale(0.75) rotate(0deg);
+  }
+
+  50% {
+    transform: scale(2.15) rotate(360deg);
+  }
+}
+
+.animate-spinner-scale {
+  animation: spinner-scale 1.2s ease-in-out infinite;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

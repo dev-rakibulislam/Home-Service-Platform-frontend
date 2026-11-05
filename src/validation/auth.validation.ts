@@ -41,7 +41,7 @@ export const userRegisterSchema = userLoginSchema
       .max(100, "Address must be less than 100 characters long")
       .optional(),
 
-    role: z.string(),
+    role: z.string().optional(),
     bio: z
       .string()
       .trim()
