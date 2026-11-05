@@ -1,12 +1,12 @@
-import z from "zod";
+import { z } from "zod";
 
 export const userLoginSchema = z.object({
   email: z
-    .string({ required_error: "Email is required" })
+    .string({ error: "Email is required" })
     .email("Please provide a valid email"),
 
   password: z
-    .string({ required_error: "Password is required" })
+    .string({ error: "Password is required" })
     .min(6, "Password must be at least 6 characters long")
     .max(32, "Password must be less than 32 characters long"),
 });
@@ -14,13 +14,11 @@ export const userLoginSchema = z.object({
 export const userRegisterSchema = userLoginSchema
   .extend({
     name: z
-      .string({
-        required_error: "Name is required",
-        invalid_type_error: "Name must be a string",
-      })
+      .string({ error: "Name is required" })
       .trim()
       .min(3, "First name must be at least 3 characters long")
       .max(255, "First name must be less than 255 characters long"),
+
     phoneNumber: z
       .string()
       .trim()
@@ -34,14 +32,16 @@ export const userRegisterSchema = userLoginSchema
       .min(5, "Address must be at least 5 characters long")
       .max(255, "Address must be less than 255 characters long")
       .optional(),
+
     userName: z
       .string()
       .trim()
-      .min(5, "Address must be at least 5 characters long")
-      .max(100, "Address must be less than 100 characters long")
+      .min(5, "Username must be at least 5 characters long")
+      .max(100, "Username must be less than 100 characters long")
       .optional(),
 
     role: z.string().optional(),
+
     bio: z
       .string()
       .trim()
@@ -60,7 +60,8 @@ export const userRegisterSchema = userLoginSchema
       .min(0, "Years of experience must be at least 0")
       .max(100, "Years of experience must be less than 100")
       .optional(),
-    skills: z.string().array().optional(),
+
+    skills: z.array(z.string()).optional(),
   })
   .superRefine((data, ctx) => {
     if (data.role !== "TECHNICIAN") return;
@@ -96,11 +97,12 @@ export const userRegisterSchema = userLoginSchema
         message: "Hourly rate is required for technicians",
       });
     }
+
     if (!data.userName) {
       ctx.addIssue({
         code: "custom",
         path: ["userName"],
-        message: "userName is required for technicians",
+        message: "Username is required for technicians",
       });
     }
 
@@ -113,24 +115,25 @@ export const userRegisterSchema = userLoginSchema
     }
   });
 
-export const technicianProfileUpdateSchema = z.object({
-  bio: z
-    .string()
-    .trim()
-    .min(10, "Bio must be at least 10 characters long")
-    .max(500, "Bio must be less than 500 characters long")
-    .optional(),
+  export const technicianProfileUpdateSchema = z.object({
+    bio: z
+      .string()
+      .trim()
+      .min(10, "Bio must be at least 10 characters long")
+      .max(500, "Bio must be less than 500 characters long")
+      .optional(),
 
-  hourlyRate: z.coerce
-    .number()
-    .min(1, "Hourly rate must be at least 1")
-    .max(99999999.99, "Hourly rate is too high")
-    .optional(),
+    hourlyRate: z.coerce
+      .number()
+      .min(1, "Hourly rate must be at least 1")
+      .max(99999999.99, "Hourly rate is too high")
+      .optional(),
 
-  experienceYears: z
-    .number()
-    .min(0, "Years of experience must be at least 0")
-    .max(100, "Years of experience must be less than 100")
-    .optional(),
-  skills: z.string().array().optional(),
-});
+    experienceYears: z
+      .number()
+      .min(0, "Years of experience must be at least 0")
+      .max(100, "Years of experience must be less than 100")
+      .optional(),
+
+    skills: z.array(z.string()).optional(),
+  });

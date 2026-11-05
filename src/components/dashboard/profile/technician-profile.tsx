@@ -19,7 +19,13 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 import { toast } from "sonner";
-
+type ApiError = Error & {
+  data?: {
+    errorDetails?: {
+      message?: string;
+    }[];
+  };
+};
 export function TechnicianProfile() {
   const { data, isLoading } = useGetMe();
   const updateProfile = useUpdateTechnicianProfile();
@@ -94,11 +100,14 @@ export function TechnicianProfile() {
       onSuccess: () => {
         toast.success("Profile updated successfully.");
       },
+
       onError: (error) => {
+        const apiError = error as ApiError;
+
         toast.error(
-          error instanceof Error
-            ? error?.data?.errorDetails[0]?.message
-            : "Failed to update profile.",
+          apiError.data?.errorDetails?.[0]?.message ??
+            apiError.message ??
+            "Failed to update profile.",
         );
       },
     });

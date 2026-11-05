@@ -1,7 +1,7 @@
-
 "use client";
 
-import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, use } from "react";
+import { use } from "react";
+
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -19,7 +19,6 @@ import {
 import { useGetMe, useGetServicesDetails } from "@/hooks";
 import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "next/navigation";
-import BookingForm from "@/components/bookings/booking-form";
 
 function formatPrice(value: string | number) {
   return Number(value).toLocaleString("en-BD");
@@ -43,14 +42,12 @@ export default function ServiceDetailsPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-
   const router = useRouter();
   const pathname = usePathname();
 
   const { data: meResponse, isLoading: isAuthLoading } = useGetMe();
   const user = meResponse?.data;
   console.log(user);
-  
 
   const { id } = use(params);
 
@@ -77,7 +74,11 @@ export default function ServiceDetailsPage({
 
   const weeklyAvailability = (technician?.availabilitySlots ?? [])
     .filter(
-      (slot: { dayOfWeek: any; startTime: any; endTime: any; }, index: any, slots: any[]) =>
+      (
+        slot: { dayOfWeek: any; startTime: any; endTime: any },
+        index: any,
+        slots: any[],
+      ) =>
         slots.findIndex(
           (item) =>
             item.dayOfWeek === slot.dayOfWeek &&
@@ -86,7 +87,8 @@ export default function ServiceDetailsPage({
         ) === index,
     )
     .sort(
-      (a: { dayOfWeek: string; }, b: { dayOfWeek: string; }) => dayOrder.indexOf(a.dayOfWeek) - dayOrder.indexOf(b.dayOfWeek),
+      (a: { dayOfWeek: string }, b: { dayOfWeek: string }) =>
+        dayOrder.indexOf(a.dayOfWeek) - dayOrder.indexOf(b.dayOfWeek),
     );
 
   if (isLoading) {
@@ -321,41 +323,14 @@ export default function ServiceDetailsPage({
 
             {technician?.skills?.length ? (
               <div className="mt-4 flex flex-wrap gap-2">
-                {technician.skills.map(
-                  (
-                    skill:
-                      | boolean
-                      | Key
-                      | ReactElement<
-                          unknown,
-                          string | JSXElementConstructor<any>
-                        >
-                      | Iterable<ReactNode>
-                      | Promise<
-                          | string
-                          | number
-                          | bigint
-                          | boolean
-                          | ReactPortal
-                          | ReactElement<
-                              unknown,
-                              string | JSXElementConstructor<any>
-                            >
-                          | Iterable<ReactNode>
-                          | null
-                          | undefined
-                        >
-                      | null
-                      | undefined,
-                  ) => (
-                    <span
-                      key={skill}
-                      className="rounded-full border border-border px-3 py-2 text-sm"
-                    >
-                      {skill}
-                    </span>
-                  ),
-                )}
+                {technician.skills.map((skill: string, index: number) => (
+                  <span
+                    key={`${skill}-${index}`}
+                    className="rounded-full border border-border px-3 py-2 text-sm"
+                  >
+                    {skill}
+                  </span>
+                ))}
               </div>
             ) : (
               <p className="mt-3 text-sm text-muted-foreground">

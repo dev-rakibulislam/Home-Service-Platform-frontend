@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { Trash2, CalendarDays, Clock } from "lucide-react";
 
@@ -25,6 +24,7 @@ import {
 } from "@/components/ui/card";
 
 import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
 
 const DAYS = [
   { label: "Monday", value: "MONDAY" },
@@ -78,7 +78,9 @@ export default function AvailabilityPage() {
     return a.startTime.localeCompare(b.startTime);
   });
 
-  const handleCreate = (e: FormEvent<HTMLFormElement>) => {
+  const handleCreate = (
+    e: Parameters<NonNullable<React.ComponentProps<"form">["onSubmit"]>>[0],
+  ) => {
     e.preventDefault();
 
     if (startTime >= endTime) {
@@ -101,8 +103,8 @@ export default function AvailabilityPage() {
         onError: (error) => {
           toast.error(
             error instanceof Error
-              ? error?.data?.message
-              : "Failed to create availability."
+              ? error.message
+              : "Failed to create availability.",
           );
         },
       },

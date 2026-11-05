@@ -3,15 +3,30 @@
 import Link from "next/link";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 
-type ServicesHeaderProps = {
+interface ServicesHeaderProps {
   search: string;
   onSearchChange: (value: string) => void;
-  categories: [string, string][];
+
   category: string;
   onCategoryChange: (value: string) => void;
+
+  categories: [string, string][];
+
+  location: string;
+  onLocationChange: (value: string) => void;
+
+  minRating: string;
+  onMinRatingChange: (value: string) => void;
+
+  maxPrice: string;
+  onMaxPriceChange: (value: string) => void;
+
   showFilters: boolean;
   onToggleFilters: () => void;
-};
+
+  onClearFilters: () => void;
+  hasActiveFilters: boolean;
+}
 
 export default function ServicesHeader({
   search,

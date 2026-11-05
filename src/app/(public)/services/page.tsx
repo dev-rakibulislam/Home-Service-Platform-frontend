@@ -1,7 +1,7 @@
-
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+
 import { useGetAllServices } from "@/hooks";
 import ServicesGrid, { type Service } from "@/components/service/serviceGrid";
 import ServicesHeader from "@/components/service/ServicesHeader";
@@ -42,26 +42,31 @@ export default function ServicesPage() {
     [services],
   );
 
-  // Reset pagination only when the user changes a filter.
-  // Never reset because API data or totalPages changes.
-  useEffect(() => {
+  // Filter change handlers: reset pagination immediately.
+  function handleSearchChange(value: string) {
+    setSearch(value);
     setCurrentPage(1);
-  }, [category, location, minRating, maxPrice]);
+  }
 
-  const displayedServices = useMemo(() => {
-    const query = search.trim().toLowerCase();
+  function handleCategoryChange(value: string) {
+    setCategory(value);
+    setCurrentPage(1);
+  }
 
-    if (!query) return services;
+  function handleLocationChange(value: string) {
+    setLocation(value);
+    setCurrentPage(1);
+  }
 
-    return services.filter((service) => {
-      return (
-        service.name.toLowerCase().includes(query) ||
-        (service.description ?? "").toLowerCase().includes(query) ||
-        (service.category?.name ?? "").toLowerCase().includes(query) ||
-        (service.technician?.user?.name ?? "").toLowerCase().includes(query)
-      );
-    });
-  }, [services, search]);
+  function handleMinRatingChange(value: string) {
+    setMinRating(value);
+    setCurrentPage(1);
+  }
+
+  function handleMaxPriceChange(value: string) {
+    setMaxPrice(value);
+    setCurrentPage(1);
+  }
 
   function handlePageChange(page: number) {
     if (page < 1 || page > totalPages) return;
@@ -86,20 +91,35 @@ export default function ServicesPage() {
     minRating !== "all" ||
     maxPrice.trim() !== "";
 
+  const displayedServices = useMemo(() => {
+    const query = search.trim().toLowerCase();
+
+    if (!query) return services;
+
+    return services.filter((service) => {
+      return (
+        service.name.toLowerCase().includes(query) ||
+        (service.description ?? "").toLowerCase().includes(query) ||
+        (service.category?.name ?? "").toLowerCase().includes(query) ||
+        (service.technician?.user?.name ?? "").toLowerCase().includes(query)
+      );
+    });
+  }, [services, search]);
+
   return (
     <main className="min-h-screen">
       <ServicesHeader
         search={search}
-        onSearchChange={setSearch}
+        onSearchChange={handleSearchChange}
         category={category}
-        onCategoryChange={setCategory}
+        onCategoryChange={handleCategoryChange}
         categories={categories}
         location={location}
-        onLocationChange={setLocation}
+        onLocationChange={handleLocationChange}
         minRating={minRating}
-        onMinRatingChange={setMinRating}
+        onMinRatingChange={handleMinRatingChange}
         maxPrice={maxPrice}
-        onMaxPriceChange={setMaxPrice}
+        onMaxPriceChange={handleMaxPriceChange}
         showFilters={showFilters}
         onToggleFilters={() => setShowFilters((value) => !value)}
         onClearFilters={clearFilters}
@@ -121,6 +141,7 @@ export default function ServicesPage() {
           </div>
 
           {isFetching && (
+            // biome-ignore lint/a11y/useSemanticElements: <explanation>
             <span role="status" className="text-sm text-muted-foreground">
               Updating services...
             </span>
