@@ -14,6 +14,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { NavUser } from "./nav-user";
+import Logo from "../shared/logo";
 
 export function DashboardSidebar() {
   const pathname = usePathname();
@@ -30,7 +31,9 @@ export function DashboardSidebar() {
   return (
     <Sidebar collapsible="offcanvas">
       <SidebarContent>
-        <div className="p-4 text-xl font-bold">FixItNow</div>
+        <div className="p-4">
+        <Logo/>
+        </div>
 
         <SidebarMenu>
           {menus.map((item) => {
