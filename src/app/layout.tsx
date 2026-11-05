@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import siteDetails from "@/config/publicSiteData";
 import QueryProvider from "@/providers/query.provider";
 import { toast, Toaster } from "sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const oxaniumHeading = Oxanium({
   subsets: ["latin"],
@@ -101,7 +102,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <QueryProvider>
-          {children}
+          <TooltipProvider>{children}</TooltipProvider>
           <Toaster
             toastOptions={{
               style: {
