@@ -325,7 +325,8 @@ export default function ServiceDetailsPage({
               <div className="mt-4 flex flex-wrap gap-2">
                 {technician.skills.map((skill: string, index: number) => (
                   <span
-                    key={`${skill}-${index}`}
+                    key={`${skill}-${// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+index}`}
                     className="rounded-full border border-border px-3 py-2 text-sm"
                   >
                     {skill}
