@@ -13,6 +13,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { NavUser } from "./nav-user";
 
 export function DashboardSidebar() {
   const pathname = usePathname();
@@ -55,8 +56,9 @@ export function DashboardSidebar() {
           })}
         </SidebarMenu>
       </SidebarContent>
-
-      <SidebarFooter>{/* User profile */}</SidebarFooter>
+      <SidebarFooter>
+        <NavUser user={data.data} />
+      </SidebarFooter>
     </Sidebar>
   );
 }
