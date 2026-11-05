@@ -1,7 +1,9 @@
 import {
   createAvailability,
   CreateAvailabilityPayload,
+  deleteAvailability,
   getAvailableTechnicians,
+  getMyAvailability,
   TechnicianProfileUpdatePayload,
   updateTechnicianProfile,
 } from "@/api";
@@ -33,11 +35,33 @@ export function useUpdateTechnicianProfile() {
   });
 }
 
+export function useGetMyAvailability() {
+  return useQuery({
+    queryKey: ["availability"],
+    queryFn: getMyAvailability,
+  });
+}
+
+
 export function useCreateAvailability() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (data: CreateAvailabilityPayload) => createAvailability(data),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["availability"],
+      });
+    },
+  });
+}
+
+export function useDeleteAvailability() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => deleteAvailability(id),
 
     onSuccess: () => {
       queryClient.invalidateQueries({

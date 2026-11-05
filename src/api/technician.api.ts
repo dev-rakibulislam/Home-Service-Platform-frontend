@@ -38,3 +38,23 @@ export function createAvailability(data: CreateAvailabilityPayload) {
     body: data,
   });
 }
+
+export type AvailabilitySlot = {
+  id: string;
+  technicianId: string;
+  dayOfWeek: string;
+  startTime: string;
+  endTime: string;
+};
+
+export function getMyAvailability() {
+  return apiClient(`${t}/availability`, {
+    method: "GET",
+  });
+}
+
+export function deleteAvailability(id: string) {
+  return apiClient(`${t}/availability/${id}`, {
+    method: "DELETE",
+  });
+}
