@@ -96,7 +96,9 @@ export function TechnicianProfile() {
       },
       onError: (error) => {
         toast.error(
-          error instanceof Error ? error.message : "Failed to update profile.",
+          error instanceof Error
+            ? error?.data?.errorDetails[0]?.message
+            : "Failed to update profile.",
         );
       },
     });

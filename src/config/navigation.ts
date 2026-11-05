@@ -64,11 +64,7 @@ export const navigation = {
       href: "/dashboard/technician/profile",
       icon: User,
     },
-    {
-      title: "Settings",
-      href: "/dashboard/technician/settings",
-      icon: Settings,
-    },
+    
   ],
 
   CUSTOMER: [

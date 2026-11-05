@@ -4,7 +4,10 @@ import {
   deleteAvailability,
   getAvailableTechnicians,
   getMyAvailability,
+  getMyBookings,
   TechnicianProfileUpdatePayload,
+  UpdateBookingPayload,
+  updateMyBooking,
   updateTechnicianProfile,
 } from "@/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -42,7 +45,6 @@ export function useGetMyAvailability() {
   });
 }
 
-
 export function useCreateAvailability() {
   const queryClient = useQueryClient();
 
@@ -70,3 +72,30 @@ export function useDeleteAvailability() {
     },
   });
 }
+
+export const useGetMyBookings = () => {
+  return useQuery({
+    queryKey: ["technician-bookings"],
+    queryFn: getMyBookings,
+  });
+};
+
+export const useUpdateMyBooking = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      payload,
+    }: {
+      id: string;
+      payload: UpdateBookingPayload;
+    }) => updateMyBooking(id, payload),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["technician-bookings"],
+      });
+    },
+  });
+};

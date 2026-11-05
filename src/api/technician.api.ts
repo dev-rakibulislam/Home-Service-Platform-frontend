@@ -58,3 +58,62 @@ export function deleteAvailability(id: string) {
     method: "DELETE",
   });
 }
+
+
+  export type BookingStatus =
+  | "PENDING"
+  | "ACCEPTED"
+  | "IN_PROGRESS"
+  | "COMPLETED"
+  | "CANCELLED";
+
+export type TechnicianBooking = {
+  id: string;
+  customerId: string;
+  technicianId: string;
+  serviceId: string;
+  bookingDate: string;
+  status: BookingStatus;
+  createdAt: string;
+  updatedAt: string;
+
+  customer: {
+    id: string;
+    name: string;
+    email: string;
+    phoneNumber: string | null;
+    address: string | null;
+    image: string | null;
+  };
+
+  service: {
+    id: string;
+    technicianId: string;
+    categoryId: string;
+    name: string;
+    description: string;
+    price: string;
+    duration: number;
+    isActive: boolean;
+    createdAt: string;
+    updatedAt: string;
+  };
+};
+
+
+export type UpdateBookingPayload = {
+  status: BookingStatus;
+};
+
+export const getMyBookings = () => {
+  return apiClient("/technician/bookings", {
+    method: "GET",
+  });
+};
+
+export const updateMyBooking = (id: string, payload: UpdateBookingPayload) => {
+  return apiClient(`/technician/update-booking/${id}`, {
+    method: "POST",
+    body: payload,
+  });
+};
