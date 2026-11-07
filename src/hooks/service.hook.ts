@@ -1,5 +1,10 @@
 // biome-ignore assist/source/organizeImports: <explanation>
-import { HomePageServiceList, ServiceDetails, ServiceList } from "@/api";
+import {
+  HomePageServiceList,
+  MyServiceList,
+  ServiceDetails,
+  ServiceList,
+} from "@/api";
 import { useQuery } from "@tanstack/react-query";
 
 export function useGetServices() {
@@ -8,6 +13,7 @@ export function useGetServices() {
     queryFn: HomePageServiceList,
   });
 }
+
 export function useGetServicesDetails(id: string) {
   return useQuery({
     queryKey: ["services-details", id],
@@ -44,5 +50,14 @@ export function useGetAllServices(filters: any) {
         minRating,
         maxPrice,
       }),
+  });
+}
+
+export function useGetMyServices(filters: { page?: number; limit?: number }) {
+  const { page = 1, limit = 10 } = filters;
+
+  return useQuery({
+    queryKey: ["my-services", page, limit],
+    queryFn: () => MyServiceList({ page, limit }),
   });
 }

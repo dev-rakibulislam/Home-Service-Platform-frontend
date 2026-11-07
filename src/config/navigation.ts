@@ -60,11 +60,15 @@ export const navigation = {
       icon: Clock,
     },
     {
+      title: "My Services",
+      href: "/dashboard/technician/services",
+      icon: Wrench,
+    },
+    {
       title: "My Profile",
       href: "/dashboard/technician/profile",
       icon: User,
     },
-    
   ],
 
   CUSTOMER: [
