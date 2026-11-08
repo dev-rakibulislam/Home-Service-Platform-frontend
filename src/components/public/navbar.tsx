@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { LayoutDashboard, Loader2, LogOut, Menu, User } from "lucide-react";
-import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { LayoutDashboard,  Menu, User } from "lucide-react";
+
 
 import {
   NavigationMenu,
@@ -30,9 +29,10 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
-import { useGetMe, useLogout } from "@/hooks";
+import { useGetMe,  } from "@/hooks";
 import siteDetails from "@/config/publicSiteData";
 import Logo from "../shared/logo";
+import { LogoutButton } from "../auth/log-out";
 
 const navItems = [
   { title: "Home", href: "/" },
@@ -60,29 +60,13 @@ function UserAvatar({
 }
 
 export function Navbar() {
-  const queryClient = useQueryClient();
   const { data, isLoading } = useGetMe();
-  const { mutate: logout, isPending: isLoggingOut } = useLogout();
 
   const user = data?.data;
   const name = user?.name ?? "User";
   const email = user?.email ?? "";
   const image = user?.image || "/user.avif";
 
-  const LogoutIcon = isLoggingOut ? Loader2 : LogOut;
-  const logoutLabel = isLoggingOut ? "Logging out..." : "Logout";
-
-  const handleLogout = () => {
-    logout(undefined, {
-      onSuccess: () => {
-        queryClient.removeQueries({ queryKey: ["user"] });
-        toast.success("Logged out successfully");
-      },
-      onError: () => {
-        toast.error("Logout failed", { description: "Please try again." });
-      },
-    });
-  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
@@ -121,16 +105,14 @@ export function Navbar() {
             ) : (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    disabled={isLoggingOut}
-                    className="h-auto gap-2 px-2 py-1.5"
-                  >
+                  <Button variant="ghost" className="h-auto gap-2 px-2 py-1.5">
                     <UserAvatar name={name} image={image} className="size-9" />
+
                     <div className="hidden text-left lg:block">
                       <p className="max-w-32 truncate text-sm font-medium">
                         {name}
                       </p>
+
                       <p className="max-w-40 truncate text-xs text-muted-foreground">
                         {email}
                       </p>
@@ -158,15 +140,8 @@ export function Navbar() {
                       Profile
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem
-                    disabled={isLoggingOut}
-                    onClick={handleLogout}
-                    className="text-destructive focus:text-destructive"
-                  >
-                    <LogoutIcon
-                      className={`mr-2 size-4 ${isLoggingOut ? "animate-spin" : ""}`}
-                    />
-                    {logoutLabel}
+                  <DropdownMenuItem className="text-destructive focus:text-destructive">
+                    <LogoutButton />
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -244,17 +219,7 @@ export function Navbar() {
                       </Button>
                     </SheetClose>
 
-                    <Button
-                      variant="destructive"
-                      className="w-full"
-                      disabled={isLoggingOut}
-                      onClick={handleLogout}
-                    >
-                      <LogoutIcon
-                        className={`mr-2 size-4 ${isLoggingOut ? "animate-spin" : ""}`}
-                      />
-                      {logoutLabel}
-                    </Button>
+                    <LogoutButton />
                   </div>
                 )}
               </div>

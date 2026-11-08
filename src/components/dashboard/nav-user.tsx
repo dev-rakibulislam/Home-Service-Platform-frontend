@@ -17,6 +17,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { LogOut, MoreVertical } from "lucide-react";
+import { LogoutButton } from "../auth/log-out";
 
 export function NavUser({
   user,
@@ -73,8 +74,8 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <LogOut />
-              Log out
+             
+              <LogoutButton></LogoutButton>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

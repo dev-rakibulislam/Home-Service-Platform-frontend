@@ -60,7 +60,7 @@ export function LoginForm({
             !callbackUrl.startsWith("//") &&
             !callbackUrl.includes("\\")
               ? callbackUrl
-              : "/";
+              : "/dashboard";
 
           router.replace(redirectTo);
         },

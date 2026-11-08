@@ -24,5 +24,6 @@ export function useGetMe() {
 export function useLogout() {
   return useMutation({
     mutationFn: userLogout,
+    
   });
 }
