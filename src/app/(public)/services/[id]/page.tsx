@@ -270,28 +270,24 @@ export default function ServiceDetailsPage({
                   {Number(rating).toFixed(1)} technician rating
                 </p>
               )}
+<Button
+  type="button"
+  disabled={!technician?.isAvailable || isAuthLoading}
+  className="mt-6 inline-flex min-h-12 w-full"
+  onClick={() => {
+    if (!user) {
+      router.push(
+        `/login?callbackUrl=${encodeURIComponent(pathname)}`,
+      );
+      return;
+    }
 
-              <Button
-                type="button"
-                disabled={!technician?.isAvailable || isAuthLoading}
-                className="mt-6 inline-flex min-h-12 w-full"
-                onClick={() => {
-                  if (!user) {
-                    router.push(
-                      `/login?callbackUrl=${encodeURIComponent(pathname)}`,
-                    );
-                    return;
-                  }
-
-                  // Authenticated booking flow will start here.
-                }}
-              >
-                {technician?.isAvailable
-                  ? "Book this service"
-                  : "Currently unavailable"}
-                {/* <BookingForm serviceId={id} /> */}
-                <ArrowUpRight className="size-4" />
-              </Button>
+    router.push(`/services/${id}/booking`);
+  }}
+>
+  Book this service
+  <ArrowUpRight className="size-4" />
+</Button>
 
               <p className="mt-4 flex items-start gap-2 text-xs leading-5 text-muted-foreground">
                 <ShieldCheck className="mt-0.5 size-4 shrink-0" />

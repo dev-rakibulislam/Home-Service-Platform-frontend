@@ -75,3 +75,4 @@ export async function updateService(id: string, payload: UpdateServicePayload) {
     body: payload,
   });
 }
+

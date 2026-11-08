@@ -1,9 +1,9 @@
-
 "use client";
 
-import apiClient from "@/lib/apiClient";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+// biome-ignore assist/source/organizeImports: <explanation>
+import { createBooking, getCustomerBookings, type GetMyBookingsParams, getMyCusBookings } from "@/api/booking.api";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export type CreateBookingPayload = {
   serviceId: string;
@@ -16,16 +16,40 @@ export function useCreateBooking() {
 
   return useMutation({
     mutationFn: (payload: CreateBookingPayload) =>
-      apiClient("/bookings", {
-        method: "POST",
-        body: payload,
-      }),
+      createBooking(payload),
 
     onSuccess: async () => {
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["user"] }),
-        queryClient.invalidateQueries({ queryKey: ["bookings"] }),
+        queryClient.invalidateQueries({
+          queryKey: ["bookings"],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["my-bookings"],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["my-recent-bookings"],
+        }),
       ]);
     },
+  });
+}
+
+export function useGetMyBookings(
+  params: GetMyBookingsParams,
+) {
+  return useQuery({
+    queryKey: ["my-bookings", params],
+    queryFn: () => getMyCusBookings(params),
+    placeholderData: (previousData) => previousData,
+  });
+}
+
+export function useGetCustomerBookings(
+  page: number,
+  limit: number,
+) {
+  return useQuery({
+    queryKey: ["my-bookings", page, limit],
+    queryFn: () => getCustomerBookings(page, limit),
   });
 }

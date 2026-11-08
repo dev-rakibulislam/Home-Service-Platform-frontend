@@ -42,7 +42,7 @@ export const navigation = {
       icon: Settings,
     },
   ],
-
+//* done
   TECHNICIAN: [
     {
       title: "Dashboard",
@@ -78,11 +78,6 @@ export const navigation = {
       icon: LayoutDashboard,
     },
     {
-      title: "Browse Services",
-      href: "/dashboard/customer/services",
-      icon: Wrench,
-    },
-    {
       title: "My Bookings",
       href: "/dashboard/customer/bookings",
       icon: CalendarDays,
@@ -91,11 +86,6 @@ export const navigation = {
       title: "My Profile",
       href: "/dashboard/customer/profile",
       icon: User,
-    },
-    {
-      title: "Settings",
-      href: "/dashboard/customer/settings",
-      icon: Settings,
     },
   ],
 } as const;
