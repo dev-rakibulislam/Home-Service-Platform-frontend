@@ -3,10 +3,15 @@
 import Link from "next/link";
 import { Clock, Edit, Plus, Trash2 } from "lucide-react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { useGetMyServices } from "@/hooks";
+
+type Category = {
+  id: string;
+  name: string;
+};
 
 type Service = {
   id: string;
@@ -15,6 +20,10 @@ type Service = {
   price: number | string;
   duration: number;
   isActive: boolean;
+  category?: Category;
+  _count?: {
+    bookings: number;
+  };
 };
 
 export default function ServicesPage() {
@@ -28,8 +37,13 @@ export default function ServicesPage() {
     limit: 10,
   });
 
-  // API response: { data: { services: [], pagination: {} } }
-  const services: Service[] = data?.data?.services ?? [];
+  // API response:
+  // {
+  //   success: true,
+  //   data: [],
+  //   metaData: {}
+  // }
+  const services: Service[] = data?.data ?? [];
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
@@ -37,6 +51,7 @@ export default function ServicesPage() {
       <div className="mb-8 flex items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">My Services</h1>
+
           <p className="mt-2 text-sm text-muted-foreground">
             Manage the services you offer to customers.
           </p>
@@ -74,9 +89,11 @@ export default function ServicesPage() {
           <CardContent className="flex min-h-40 items-center justify-center p-6">
             <div className="text-center">
               <p className="font-medium">Failed to load services</p>
+
               <p className="mt-1 text-sm text-muted-foreground">
                 Please try again later.
               </p>
+
               <Button
                 variant="outline"
                 className="mt-4"
@@ -122,10 +139,16 @@ export default function ServicesPage() {
               <CardContent className="flex flex-1 flex-col p-6">
                 {/* Top */}
                 <div className="flex items-start justify-between gap-3">
-                  <div>
+                  <div className="min-w-0">
                     <h2 className="font-semibold">{service.name}</h2>
 
-                    <p className="mt-1 text-sm text-muted-foreground">
+                    {service.category?.name && (
+                      <p className="mt-1 text-xs font-medium text-primary">
+                        {service.category.name}
+                      </p>
+                    )}
+
+                    <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">
                       {service.description}
                     </p>
                   </div>
@@ -139,6 +162,7 @@ export default function ServicesPage() {
                 <div className="mt-6 flex items-center justify-between border-y py-4">
                   <div>
                     <p className="text-xs text-muted-foreground">Price</p>
+
                     <p className="mt-1 text-lg font-semibold">
                       ৳{Number(service.price).toFixed(2)}
                     </p>
@@ -147,12 +171,20 @@ export default function ServicesPage() {
                   <div className="text-right">
                     <p className="text-xs text-muted-foreground">Duration</p>
 
-                    <p className="mt-1 flex items-center gap-1 text-sm font-medium">
+                    <p className="mt-1 flex items-center justify-end gap-1 text-sm font-medium">
                       <Clock className="size-4" />
                       {service.duration} min
                     </p>
                   </div>
                 </div>
+
+                {/* Booking count */}
+                {service._count && (
+                  <p className="mt-3 text-xs text-muted-foreground">
+                    {service._count.bookings} booking
+                    {service._count.bookings !== 1 ? "s" : ""}
+                  </p>
+                )}
 
                 {/* Actions */}
                 <div className="mt-auto flex gap-2 pt-5">

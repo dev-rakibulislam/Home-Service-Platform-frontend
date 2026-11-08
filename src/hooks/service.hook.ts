@@ -1,11 +1,12 @@
 // biome-ignore assist/source/organizeImports: <explanation>
 import {
+  createService,
   HomePageServiceList,
   MyServiceList,
   ServiceDetails,
   ServiceList,
 } from "@/api";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 export function useGetServices() {
   return useQuery({
@@ -59,5 +60,11 @@ export function useGetMyServices(filters: { page?: number; limit?: number }) {
   return useQuery({
     queryKey: ["my-services", page, limit],
     queryFn: () => MyServiceList({ page, limit }),
+  });
+}
+
+export function useCreateService() {
+  return useMutation({
+    mutationFn: createService,
   });
 }

@@ -51,9 +51,3 @@ export function MyServiceList(filters: { page?: number; limit?: number }) {
 
   return apiClient(`/services/my-services${query ? `?${query}` : ""}`);
 }
-
-export function useCreateService() {
-  return useMutation({
-    mutationFn: createService,
-  });
-}
