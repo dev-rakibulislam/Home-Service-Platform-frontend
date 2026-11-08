@@ -1,12 +1,16 @@
 // biome-ignore assist/source/organizeImports: <explanation>
 import {
   createService,
+  deleteService,
   HomePageServiceList,
   MyServiceList,
   ServiceDetails,
   ServiceList,
+  updateService,
+  UpdateServicePayload,
 } from "@/api";
-import { useMutation, useQuery } from "@tanstack/react-query";
+
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useGetServices() {
   return useQuery({
@@ -66,5 +70,43 @@ export function useGetMyServices(filters: { page?: number; limit?: number }) {
 export function useCreateService() {
   return useMutation({
     mutationFn: createService,
+  });
+}
+
+export function useDeleteService() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteService,
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["my-services"],
+      });
+    },
+  });
+}
+
+export function useUpdateService() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      payload,
+    }: {
+      id: string;
+      payload: UpdateServicePayload;
+    }) => updateService(id, payload),
+
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["my-services"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["services-details", variables.id],
+      });
+    },
   });
 }

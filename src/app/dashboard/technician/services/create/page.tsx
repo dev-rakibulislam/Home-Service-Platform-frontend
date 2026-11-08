@@ -19,6 +19,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 import { useCreateService, useGetCategory } from "@/hooks";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function CreateServicePage() {
   const router = useRouter();
@@ -32,6 +33,7 @@ export default function CreateServicePage() {
     isError,
     error,
   } = useCreateService();
+  const queryClient = useQueryClient();
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -81,6 +83,8 @@ export default function CreateServicePage() {
         onSuccess: () => {
           router.push("/dashboard/technician/services");
           router.refresh();
+          queryClient.invalidateQueries({ queryKey: ["my-services"] });
+
         },
       },
     );

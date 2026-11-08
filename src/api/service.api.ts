@@ -51,3 +51,24 @@ export function MyServiceList(filters: { page?: number; limit?: number }) {
 
   return apiClient(`/services/my-services${query ? `?${query}` : ""}`);
 }
+
+export function deleteService(id: string) {
+  return apiClient(`/services/${id}`, {
+    method: "DELETE",
+  });
+}
+
+export type UpdateServicePayload = {
+  name: string;
+  description: string;
+  price: number;
+  duration: number;
+  categoryId: string;
+};
+
+export async function updateService(id: string, payload: UpdateServicePayload) {
+  return apiClient(`/services/${id}`, {
+    method: "PATCH",
+    body: payload,
+  });
+}

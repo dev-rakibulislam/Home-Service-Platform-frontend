@@ -6,7 +6,7 @@ import { Clock, Edit, Plus, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { useGetMyServices } from "@/hooks";
+import { useDeleteService, useGetMyServices } from "@/hooks";
 
 type Category = {
   id: string;
@@ -37,12 +37,19 @@ export default function ServicesPage() {
     limit: 10,
   });
 
-  // API response:
-  // {
-  //   success: true,
-  //   data: [],
-  //   metaData: {}
-  // }
+  const { mutate: deleteService, isPending: isDeleting } = useDeleteService();
+  const handleDelete = (id: string, name: string) => {
+    const confirmed = window.confirm(
+      `Are you sure you want to delete "${name}"?`,
+    );
+
+    if (!confirmed) return;
+
+    deleteService(id);
+  };
+
+
+
   const services: Service[] = data?.data ?? [];
 
   return (
@@ -68,8 +75,8 @@ export default function ServicesPage() {
       {/* Loading */}
       {isLoading && (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {Array.from({ length: 3 }).map((_, index) => (
-            <Card key={index}>
+          {["skeleton-1", "skeleton-2", "skeleton-3"].map((key) => (
+            <Card key={key}>
               <CardContent className="p-6">
                 <div className="space-y-4">
                   <div className="h-5 w-2/3 animate-pulse rounded bg-muted" />
@@ -201,8 +208,9 @@ export default function ServicesPage() {
                     variant="outline"
                     size="icon"
                     className="text-destructive hover:text-destructive"
-                    disabled
-                    title="Delete functionality not implemented"
+                    disabled={isDeleting}
+                    onClick={() => handleDelete(service.id, service.name)}
+                    title="Delete service"
                   >
                     <Trash2 className="size-4" />
                   </Button>
