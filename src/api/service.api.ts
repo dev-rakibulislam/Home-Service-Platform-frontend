@@ -37,12 +37,14 @@ export async function createService(payload: CreateServicePayload) {
     body: payload,
   });
 }
-
-export function MyServiceList(filters: { page?: number; limit?: number }) {
+export function MyServiceList(filters: {
+  page?: number;
+  limit?: number;
+}) {
   const params = new URLSearchParams();
 
   Object.entries(filters).forEach(([key, value]) => {
-    if (value !== undefined && value !== "") {
+    if (value !== undefined) {
       params.set(key, String(value));
     }
   });
