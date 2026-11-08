@@ -46,7 +46,7 @@ export function MyServiceList(filters: {
   Object.entries(filters).forEach(([key, value]) => {
     if (value !== undefined) {
       params.set(key, String(value));
-    }
+    } 
   });
 
   const query = params.toString();
